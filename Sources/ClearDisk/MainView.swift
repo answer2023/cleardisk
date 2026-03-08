@@ -11,6 +11,7 @@ enum Layout {
 // MARK: - Main View
 struct MainView: View {
     @ObservedObject var diskMonitor: DiskMonitor
+    @ObservedObject private var langManager = LanguageManager.shared
     @State private var selectedTab: Tab = .developer
     @State private var showCleanConfirm = false
     @State private var showCleanAllConfirm = false
@@ -34,16 +35,28 @@ struct MainView: View {
 
     
     enum Tab: String, CaseIterable {
-        case developer = "Developer"
-        case projects = "Projects"
-        case overview = "Overview"
-        case largeFiles = "Large Files"
+        case developer, projects, overview, largeFiles
+        
+        var localizedName: String {
+            switch self {
+            case .developer: return L("tab.developer")
+            case .projects: return L("tab.projects")
+            case .overview: return L("tab.overview")
+            case .largeFiles: return L("tab.largeFiles")
+            }
+        }
     }
     
     enum ProjectSortMode: String, CaseIterable {
-        case size = "Size"
-        case date = "Date"
-        case name = "Name"
+        case size, date, name
+        
+        var localizedName: String {
+            switch self {
+            case .size: return L("sort.size")
+            case .date: return L("sort.date")
+            case .name: return L("sort.name")
+            }
+        }
     }
     
     enum ActiveScreen {
@@ -60,8 +73,14 @@ struct MainView: View {
     }
     
     enum ProjectFilterMode: String, CaseIterable {
-        case all = "All"
-        case stale = "Stale (>30d)"
+        case all, stale
+        
+        var localizedName: String {
+            switch self {
+            case .all: return L("filter.all")
+            case .stale: return L("filter.stale")
+            }
+        }
     }
     
     var body: some View {
@@ -78,9 +97,9 @@ struct MainView: View {
             }
         }
         .frame(width: Layout.popoverWidth, height: Layout.popoverHeight)
-        .alert("Clean Cache", isPresented: $showCleanConfirm) {
-            Button("Cancel", role: .cancel) { }
-            Button("Move to Trash", role: .destructive) {
+        .alert(L("alert.cleanCache"), isPresented: $showCleanConfirm) {
+            Button(L("button.cancel"), role: .cancel) { }
+            Button(L("button.moveToTrash"), role: .destructive) {
                 if let cache = cacheToClean {
                     isCleaning = true
                     diskMonitor.devCaches.removeAll { $0.id == cache.id }
@@ -96,9 +115,9 @@ struct MainView: View {
                 Text("Delete all contents of \(cache.name)?\nThis will move \(formatBytes(cache.size)) to Trash.\n\n\(cache.riskEmoji) \(cache.riskDescription)\(xcodeWarning)")
             }
         }
-        .alert("Clean Safe Caches", isPresented: $showCleanSafeConfirm) {
-            Button("Cancel", role: .cancel) { }
-            Button("Move to Trash", role: .destructive) {
+        .alert(L("alert.cleanSafe"), isPresented: $showCleanSafeConfirm) {
+            Button(L("button.cancel"), role: .cancel) { }
+            Button(L("button.moveToTrash"), role: .destructive) {
                 isCleaning = true
                 diskMonitor.devCaches.removeAll { $0.riskLevel != "risky" }
                 diskMonitor.cleanSafeCaches()
@@ -112,9 +131,9 @@ struct MainView: View {
                 : ""
             Text("Clean \(safeCaches.count) safe/caution caches?\nThis will move \(formatBytes(safeTotal)) to Trash.\n\nRisky caches (like Docker) are NOT included.\nFiles go to Trash — you can recover them.\(xcodeWarning)")
         }
-        .alert("Clean ALL Developer Caches", isPresented: $showCleanAllConfirm) {
-            Button("Cancel", role: .cancel) { }
-            Button("Delete All (Including Risky)", role: .destructive) {
+        .alert(L("alert.cleanAll"), isPresented: $showCleanAllConfirm) {
+            Button(L("button.cancel"), role: .cancel) { }
+            Button(L("button.deleteAll"), role: .destructive) {
                 isCleaning = true
                 diskMonitor.devCaches.removeAll()
                 diskMonitor.cleanAllDevCaches()
@@ -129,9 +148,9 @@ struct MainView: View {
                 : ""
             Text("Move ALL developer caches to Trash?\nThis will free \(formatBytes(total)).\n\n\(diskMonitor.devCaches.count) cache locations will be cleaned.\nFiles go to Trash — you can recover them.\(riskyNote)\(xcodeWarning)")
         }
-        .alert("Clean Project Artifact", isPresented: $showCleanArtifactConfirm) {
-            Button("Cancel", role: .cancel) { }
-            Button("Move to Trash", role: .destructive) {
+        .alert(L("alert.cleanArtifact"), isPresented: $showCleanArtifactConfirm) {
+            Button(L("button.cancel"), role: .cancel) { }
+            Button(L("button.moveToTrash"), role: .destructive) {
                 if let artifact = artifactToClean {
                     isCleaning = true
                     diskMonitor.projectArtifacts.removeAll { $0.id == artifact.id }
@@ -144,9 +163,9 @@ struct MainView: View {
                 Text("Delete \(artifact.artifactName) from \(artifact.projectName)?\n\nThis will move \(formatBytes(artifact.size)) to Trash.\n\nType: \(artifact.projectType)\nPath: \(artifact.artifactPath)\n\nRe-run your build/install command to restore.")
             }
         }
-        .alert("Clean Selected Caches", isPresented: $showCleanSelectedCachesConfirm) {
-            Button("Cancel", role: .cancel) { }
-            Button("Move to Trash", role: .destructive) {
+        .alert(L("alert.cleanSelected"), isPresented: $showCleanSelectedCachesConfirm) {
+            Button(L("button.cancel"), role: .cancel) { }
+            Button(L("button.moveToTrash"), role: .destructive) {
                 isCleaning = true
                 let toClean = diskMonitor.devCaches.filter { selectedCacheIDs.contains($0.id) }
                 diskMonitor.devCaches.removeAll { selectedCacheIDs.contains($0.id) }
@@ -169,9 +188,9 @@ struct MainView: View {
                 : ""
             Text("Clean \(toClean.count) selected cache(s)?\nThis will move \(formatBytes(totalSize)) to Trash.\n\nFiles go to Trash — you can recover them.\(riskyNote)\(xcodeWarning)")
         }
-        .alert("Delete File", isPresented: $showDeleteFileConfirm) {
-            Button("Cancel", role: .cancel) { }
-            Button("Move to Trash", role: .destructive) {
+        .alert(L("alert.deleteFile"), isPresented: $showDeleteFileConfirm) {
+            Button(L("button.cancel"), role: .cancel) { }
+            Button(L("button.moveToTrash"), role: .destructive) {
                 if let file = fileToDelete {
                     diskMonitor.largeFiles.removeAll { $0.id == file.id }
                     diskMonitor.deleteLargeFile(file)
@@ -201,7 +220,7 @@ struct MainView: View {
                                 HStack(spacing: 4) {
                                     Image(systemName: "chevron.left")
                                         .font(.system(size: 11))
-                                    Text("Back")
+                                    Text(L("button.back"))
                                         .font(.system(size: 12))
                                 }
                                 .padding(.horizontal, 8)
@@ -222,7 +241,7 @@ struct MainView: View {
                                     .font(.system(size: 12))
                             }
                             .buttonStyle(.plain)
-                            .help("Refresh")
+                            .help(L("help.refresh"))
                         }
                     }
                     .padding(.horizontal, 12)
@@ -335,7 +354,7 @@ struct MainView: View {
                 Spacer()
             }
             
-            Text("reclaimable space found")
+            Text(L("dashboard.reclaimable"))
                 .font(.system(size: 11, weight: .medium))
                 .foregroundColor(.secondary)
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -376,7 +395,7 @@ struct MainView: View {
                 if safeDevTotal > 0 {
                     HStack(spacing: 4) {
                         Circle().fill(.green).frame(width: 6, height: 6)
-                        Text("\(formatBytes(safeDevTotal)) safe")
+                        Text(L("dashboard.safe", formatBytes(safeDevTotal)))
                             .font(.system(size: 10))
                             .foregroundColor(.secondary)
                     }
@@ -384,7 +403,7 @@ struct MainView: View {
                 if artifactTotal > 0 {
                     HStack(spacing: 4) {
                         Circle().fill(.cyan).frame(width: 6, height: 6)
-                        Text("\(formatBytes(artifactTotal)) projects")
+                        Text(L("dashboard.projects", formatBytes(artifactTotal)))
                             .font(.system(size: 10))
                             .foregroundColor(.secondary)
                     }
@@ -392,7 +411,7 @@ struct MainView: View {
                 if riskyDevTotal > 0 {
                     HStack(spacing: 4) {
                         Circle().fill(.red.opacity(0.7)).frame(width: 6, height: 6)
-                        Text("\(formatBytes(riskyDevTotal)) risky")
+                        Text(L("dashboard.risky", formatBytes(riskyDevTotal)))
                             .font(.system(size: 10))
                             .foregroundColor(.secondary)
                     }
@@ -400,7 +419,7 @@ struct MainView: View {
                 if trashTotal > 0 {
                     HStack(spacing: 4) {
                         Circle().fill(.orange).frame(width: 6, height: 6)
-                        Text("\(formatBytes(trashTotal)) trash")
+                        Text(L("dashboard.trash", formatBytes(trashTotal)))
                             .font(.system(size: 10))
                             .foregroundColor(.secondary)
                     }
@@ -418,7 +437,7 @@ struct MainView: View {
                         HStack(spacing: 4) {
                             Image(systemName: "sparkles")
                                 .font(.system(size: 10))
-                            Text("Clean Caches")
+                            Text(L("dashboard.cleanCaches"))
                                 .font(.system(size: 10, weight: .medium))
                         }
                         .padding(.horizontal, 10)
@@ -439,7 +458,7 @@ struct MainView: View {
                         HStack(spacing: 4) {
                             Image(systemName: "folder.badge.minus")
                                 .font(.system(size: 10))
-                            Text("Clean Projects")
+                            Text(L("dashboard.cleanProjects"))
                                 .font(.system(size: 10, weight: .medium))
                         }
                         .padding(.horizontal, 10)
@@ -461,7 +480,7 @@ struct MainView: View {
     var headerView: some View {
         VStack(spacing: 8) {
             HStack {
-                Text("ClearDisk")
+                Text(L("app.name"))
                     .font(.headline)
                     .fontWeight(.bold)
                 Spacer()
@@ -474,24 +493,24 @@ struct MainView: View {
                         .font(.system(size: 13))
                 }
                 .buttonStyle(.plain)
-                .help("Settings")
+                .help(L("button.settings"))
                 Button(action: { diskMonitor.scan() }) {
                     Image(systemName: "arrow.clockwise")
                         .font(.system(size: 12))
                 }
                 .buttonStyle(.plain)
-                .help("Refresh")
+                .help(L("help.refresh"))
             }
             
             // Storage bar
             storageBar
             
             HStack {
-                Text("\(formatBytes(diskMonitor.usedSpace)) used")
+                Text(L("disk.used", formatBytes(diskMonitor.usedSpace)))
                     .font(.caption)
                     .foregroundColor(.secondary)
                 Spacer()
-                Text("\(formatBytes(diskMonitor.freeSpace)) free")
+                Text(L("disk.free", formatBytes(diskMonitor.freeSpace)))
                     .font(.caption)
                     .foregroundColor(.secondary)
             }
@@ -503,15 +522,15 @@ struct MainView: View {
                         .font(.system(size: 10))
                         .foregroundColor(days <= 30 ? .red : .orange)
                     if days <= 7 {
-                        Text("⚠️ Disk full in ~\(days) day\(days == 1 ? "" : "s")!")
+                        Text(L("disk.forecast.urgent", days))
                             .font(.system(size: 11, weight: .semibold))
                             .foregroundColor(.red)
                     } else if days <= 30 {
-                        Text("Disk full in ~\(days) days at current rate")
+                        Text(L("disk.forecast.warning", days))
                             .font(.system(size: 11))
                             .foregroundColor(.orange)
                     } else {
-                        Text("~\(days) days until full (\(formatBytes(diskMonitor.dailyGrowthRate))/day)")
+                        Text(L("disk.forecast.normal", days, formatBytes(diskMonitor.dailyGrowthRate)))
                             .font(.system(size: 11))
                             .foregroundColor(.secondary)
                     }
@@ -522,7 +541,7 @@ struct MainView: View {
                     Image(systemName: "clock")
                         .font(.system(size: 10))
                         .foregroundColor(.secondary)
-                    Text("Forecast: collecting data... (\(diskMonitor.historyDataPointCount) snapshot\(diskMonitor.historyDataPointCount == 1 ? "" : "s"))")
+                    Text(L("disk.forecast.collecting", diskMonitor.historyDataPointCount))
                         .font(.system(size: 10))
                         .foregroundColor(.secondary)
                     Spacer()
@@ -563,7 +582,7 @@ struct MainView: View {
         HStack(spacing: 0) {
             ForEach(Tab.allCases, id: \.self) { tab in
                 Button(action: { selectedTab = tab }) {
-                    Text(tab.rawValue)
+                    Text(tab.localizedName)
                         .font(.system(size: 12, weight: selectedTab == tab ? .semibold : .regular))
                         .foregroundColor(selectedTab == tab ? .accentColor : .secondary)
                         .frame(maxWidth: .infinity)
@@ -592,7 +611,7 @@ struct MainView: View {
                     Image(systemName: "checkmark.circle.fill")
                         .font(.system(size: 14))
                         .foregroundColor(.green)
-                    Text("Recovered \(formatBytes(diskMonitor.lastCleanedAmount))!")
+                    Text(L("recovery.recovered", formatBytes(diskMonitor.lastCleanedAmount)))
                         .font(.system(size: 13, weight: .semibold))
                         .foregroundColor(.green)
                     Spacer()
@@ -619,7 +638,7 @@ struct MainView: View {
                         .foregroundColor(.orange)
                     
                     VStack(alignment: .leading, spacing: 2) {
-                        Text("Trash")
+                        Text(L("trash.title"))
                             .font(.system(size: 12))
                         
                         GeometryReader { geo in
@@ -635,7 +654,7 @@ struct MainView: View {
                         .foregroundColor(.secondary)
                         .frame(width: 65, alignment: .trailing)
                     
-                    Button("Empty") {
+                    Button(L("trash.empty")) {
                         diskMonitor.emptyTrash()
                     }
                     .font(.system(size: 10))
@@ -718,10 +737,10 @@ struct MainView: View {
                 Image(systemName: "chart.xyaxis.line")
                     .font(.system(size: 11))
                     .foregroundColor(.accentColor)
-                Text("Storage Trend")
+                Text(L("trend.title"))
                     .font(.system(size: 11, weight: .semibold))
                 Spacer()
-                Text("\(diskMonitor.historySpanDays)d history")
+                Text(L("trend.history", diskMonitor.historySpanDays))
                     .font(.system(size: 9))
                     .foregroundColor(.secondary)
             }
@@ -795,7 +814,7 @@ struct MainView: View {
                         .foregroundColor(.secondary)
                     if let days = diskMonitor.forecastDaysUntilFull {
                         Spacer()
-                        Text("~\(days)d until full")
+                        Text(L("trend.daysUntilFull", days))
                             .font(.system(size: 10))
                             .foregroundColor(days <= 30 ? .red : .orange)
                     }
@@ -848,10 +867,10 @@ struct MainView: View {
                     Image(systemName: "checkmark.circle")
                         .font(.system(size: 32))
                         .foregroundColor(.green)
-                    Text("No developer caches found")
+                    Text(L("devCache.noCaches"))
                         .font(.system(size: 13))
                         .foregroundColor(.secondary)
-                    Text("Your disk is clean!")
+                    Text(L("devCache.diskClean"))
                         .font(.system(size: 11))
                         .foregroundColor(.secondary)
                 }
@@ -860,9 +879,9 @@ struct MainView: View {
                 let totalDev = diskMonitor.devCaches.reduce(Int64(0)) { $0 + $1.size }
                 HStack {
                     VStack(alignment: .leading, spacing: 2) {
-                        Text("Developer Caches")
+                        Text(L("devCache.title"))
                             .font(.system(size: 12, weight: .semibold))
-                        Text("\(diskMonitor.devCaches.count) locations found")
+                        Text(L("devCache.locationsFound", diskMonitor.devCaches.count))
                             .font(.system(size: 10))
                             .foregroundColor(.secondary)
                     }
@@ -948,7 +967,7 @@ struct MainView: View {
                 .buttonStyle(.plain)
                 .foregroundColor(.red)
                 .disabled(isCleaning)
-                .help("Clean all \(groupName) caches")
+                .help(L("help.cleanGroup", groupName))
                 
                 // Reveal first item in Finder
                 Button(action: {
@@ -961,7 +980,7 @@ struct MainView: View {
                 }
                 .buttonStyle(.plain)
                 .foregroundColor(.blue)
-                .help("Show in Finder")
+                .help(L("help.showInFinder"))
             }
             .padding(.horizontal, 12)
             .padding(.vertical, 6)
@@ -1015,7 +1034,7 @@ struct MainView: View {
                         Text(cache.name)
                             .font(.system(size: 12))
                         if let days = cache.daysSinceAccess {
-                            Text("\(days)d ago")
+                            Text(L("devCache.daysAgo", days))
                                 .font(.system(size: 9))
                                 .foregroundColor(days > 60 ? .orange : .secondary)
                                 .padding(.horizontal, 4)
@@ -1054,7 +1073,7 @@ struct MainView: View {
                 .buttonStyle(.plain)
                 .foregroundColor(.red)
                 .disabled(isCleaning)
-                .help("Clean \(cache.name)")
+                .help(L("help.cleanCache", cache.name))
                 
                 Button(action: {
                     diskMonitor.revealInFinder(cache.path)
@@ -1064,7 +1083,7 @@ struct MainView: View {
                 }
                 .buttonStyle(.plain)
                 .foregroundColor(.blue)
-                .help("Show in Finder")
+                .help(L("help.showInFinder"))
             }
             
             // Description line (subtle, always visible)
@@ -1114,10 +1133,10 @@ struct MainView: View {
                     Image(systemName: "folder.badge.questionmark")
                         .font(.system(size: 32))
                         .foregroundColor(.secondary)
-                    Text("No stale project artifacts found")
+                    Text(L("artifacts.noStale"))
                         .font(.system(size: 13))
                         .foregroundColor(.secondary)
-                    Text("Scans ~/Documents, ~/Developer, ~/Projects, ~/Code, ~/Desktop")
+                    Text(L("artifacts.scanDirs"))
                         .font(.system(size: 10))
                         .foregroundColor(.secondary)
                         .multilineTextAlignment(.center)
@@ -1129,9 +1148,9 @@ struct MainView: View {
                 VStack(spacing: 4) {
                     HStack {
                         VStack(alignment: .leading, spacing: 2) {
-                            Text("Project Build Artifacts")
+                            Text(L("artifacts.title"))
                                 .font(.system(size: 12, weight: .semibold))
-                            Text("\(diskMonitor.projectArtifacts.count) found · \(staleCount) stale (>30 days)")
+                            Text(L("artifacts.found", diskMonitor.projectArtifacts.count, staleCount))
                                 .font(.system(size: 10))
                                 .foregroundColor(.secondary)
                         }
@@ -1144,7 +1163,7 @@ struct MainView: View {
                     HStack(spacing: 0) {
                         ForEach(ProjectSortMode.allCases, id: \.self) { mode in
                             Button(action: { projectSortMode = mode }) {
-                                Text(mode.rawValue)
+                                Text(mode.localizedName)
                                     .font(.system(size: 10, weight: projectSortMode == mode ? .semibold : .regular))
                                     .foregroundColor(projectSortMode == mode ? .accentColor : .secondary)
                                     .padding(.horizontal, 10)
@@ -1251,7 +1270,7 @@ struct MainView: View {
                 .buttonStyle(.plain)
                 .foregroundColor(.red)
                 .disabled(isCleaning)
-                .help("Clean \(artifact.artifactName)")
+                .help(L("help.cleanArtifact", artifact.artifactName))
                 
                 Button(action: {
                     diskMonitor.revealInFinder(artifact.projectPath)
@@ -1261,11 +1280,11 @@ struct MainView: View {
                 }
                 .buttonStyle(.plain)
                 .foregroundColor(.blue)
-                .help("Show in Finder")
+                .help(L("help.showInFinder"))
             }
             
             if artifact.isStale {
-                Text("⚠️ Stale — not modified for \(artifact.daysSinceModified ?? 0) days")
+                Text(L("artifacts.staleWarning", artifact.daysSinceModified ?? 0))
                     .font(.system(size: 9))
                     .foregroundColor(.orange)
                     .padding(.leading, 36)
@@ -1284,10 +1303,10 @@ struct MainView: View {
                     Image(systemName: "doc.badge.clock")
                         .font(.system(size: 32))
                         .foregroundColor(.secondary)
-                    Text("No files larger than 100 MB found")
+                    Text(L("largeFiles.noFiles"))
                         .font(.system(size: 13))
                         .foregroundColor(.secondary)
-                    Text("Scanning Downloads, Documents, Desktop, Movies")
+                    Text(L("largeFiles.scanDirs"))
                         .font(.system(size: 11))
                         .foregroundColor(.secondary)
                 }
@@ -1331,7 +1350,7 @@ struct MainView: View {
             }
             .buttonStyle(.plain)
             .foregroundColor(.red)
-            .help("Move to Trash")
+            .help(L("help.moveToTrash"))
             Button(action: {
                 diskMonitor.revealInFinder(file.path)
             }) {
@@ -1340,7 +1359,7 @@ struct MainView: View {
             }
             .buttonStyle(.plain)
             .foregroundColor(.blue)
-            .help("Show in Finder")
+            .help(L("help.showInFinder"))
         }
         .padding(.horizontal, 12)
         .padding(.vertical, 5)
@@ -1371,10 +1390,10 @@ struct MainView: View {
                     .font(.system(size: 48))
                     .foregroundColor(.accentColor)
                 
-                Text("Welcome to ClearDisk")
+                Text(L("onboarding.welcome"))
                     .font(.system(size: 20, weight: .bold))
                 
-                Text("Your macOS disk analyzer for developers")
+                Text(L("app.tagline"))
                     .font(.system(size: 13))
                     .foregroundColor(.secondary)
                 
@@ -1393,7 +1412,7 @@ struct MainView: View {
                         Image(systemName: diskMonitor.notificationPermission == .granted ? "checkmark.circle.fill" : diskMonitor.notificationPermission == .denied ? "xmark.circle.fill" : "circle")
                             .foregroundColor(diskMonitor.notificationPermission == .granted ? .green : diskMonitor.notificationPermission == .denied ? .red : .secondary)
                             .font(.system(size: 12))
-                        Text("Notifications: \(permissionLabel(diskMonitor.notificationPermission))")
+                        Text(L("onboarding.notifications", permissionLabel(diskMonitor.notificationPermission)))
                             .font(.system(size: 11))
                             .foregroundColor(.secondary)
                         Spacer()
@@ -1407,7 +1426,7 @@ struct MainView: View {
                     HStack(spacing: 8) {
                         ProgressView()
                             .scaleEffect(0.7)
-                        Text("Scanning your disk...")
+                        Text(L("onboarding.scanning"))
                             .font(.system(size: 12))
                             .foregroundColor(.secondary)
                     }
@@ -1415,7 +1434,7 @@ struct MainView: View {
                     Button(action: {
                         diskMonitor.markOnboardingComplete()
                     }) {
-                        Text("Get Started")
+                        Text(L("onboarding.getStarted"))
                             .font(.system(size: 14, weight: .semibold))
                             .frame(width: 200, height: 32)
                     }
@@ -1443,7 +1462,7 @@ struct MainView: View {
         switch state {
         case .granted: return "Enabled"
         case .denied: return "Denied"
-        case .unknown: return "Checking..."
+        case .unknown: return L("button.checking")
         }
     }
     
@@ -1456,14 +1475,14 @@ struct MainView: View {
                     HStack(spacing: 4) {
                         Image(systemName: "chevron.left")
                             .font(.system(size: 12, weight: .semibold))
-                        Text("Back")
+                        Text(L("button.back"))
                             .font(.system(size: 13))
                     }
                 }
                 .buttonStyle(.plain)
                 .foregroundColor(.accentColor)
                 Spacer()
-                Text("Settings")
+                Text(L("settings.title"))
                     .font(.system(size: 14, weight: .semibold))
                 Spacer()
                 // Invisible balancer
@@ -1480,10 +1499,10 @@ struct MainView: View {
                 VStack(spacing: 16) {
                     // Notifications section
                     VStack(alignment: .leading, spacing: 10) {
-                        Label("Notifications", systemImage: "bell.fill")
+                        Label(L("settings.notifications"), systemImage: "bell.fill")
                             .font(.system(size: 13, weight: .semibold))
                         
-                        Text("ClearDisk sends alerts when your disk usage reaches 80% or 90%.")
+                        Text(L("settings.notifications.desc"))
                             .font(.system(size: 11))
                             .foregroundColor(.secondary)
                         
@@ -1493,11 +1512,11 @@ struct MainView: View {
                                 Image(systemName: "checkmark.circle.fill")
                                     .foregroundColor(.green)
                                     .font(.system(size: 14))
-                                Text("Notifications enabled")
+                                Text(L("settings.notifications.enabled"))
                                     .font(.system(size: 12))
                                     .foregroundColor(.primary)
                                 Spacer()
-                                Button("Open Settings") {
+                                Button(L("settings.notifications.openSettings")) {
                                     if let url = URL(string: "x-apple.systempreferences:com.apple.preference.notifications") {
                                         NSWorkspace.shared.open(url)
                                     }
@@ -1508,11 +1527,11 @@ struct MainView: View {
                                 Image(systemName: "xmark.circle.fill")
                                     .foregroundColor(.red)
                                     .font(.system(size: 14))
-                                Text("Notifications disabled")
+                                Text(L("settings.notifications.disabled"))
                                     .font(.system(size: 12))
                                     .foregroundColor(.primary)
                                 Spacer()
-                                Button("Enable in Settings") {
+                                Button(L("settings.notifications.enableButton")) {
                                     if let url = URL(string: "x-apple.systempreferences:com.apple.preference.notifications") {
                                         NSWorkspace.shared.open(url)
                                     }
@@ -1523,11 +1542,11 @@ struct MainView: View {
                                 Image(systemName: "questionmark.circle.fill")
                                     .foregroundColor(.orange)
                                     .font(.system(size: 14))
-                                Text("Permission not requested")
+                                Text(L("settings.notifications.notRequested"))
                                     .font(.system(size: 12))
                                     .foregroundColor(.primary)
                                 Spacer()
-                                Button("Enable Notifications") {
+                                Button(L("settings.notifications.enableNotifications")) {
                                     diskMonitor.setupNotifications()
                                 }
                                 .font(.system(size: 11))
@@ -1540,7 +1559,7 @@ struct MainView: View {
                                 Image(systemName: "exclamationmark.triangle.fill")
                                     .font(.system(size: 10))
                                     .foregroundColor(.orange)
-                                Text("To enable notifications, open System Settings > Notifications > ClearDisk and turn on \"Allow Notifications\".")
+                                Text(L("settings.notifications.enableInSettings"))
                                     .font(.system(size: 10))
                                     .foregroundColor(.orange)
                             }
@@ -1555,11 +1574,11 @@ struct MainView: View {
                     
                     // Launch at Login section
                     VStack(alignment: .leading, spacing: 10) {
-                        Label("General", systemImage: "gearshape.fill")
+                        Label(L("settings.general"), systemImage: "gearshape.fill")
                             .font(.system(size: 13, weight: .semibold))
                         
                         Toggle(isOn: $launchAtLogin) {
-                            Text("Launch at Login")
+                            Text(L("settings.launchAtLogin"))
                                 .font(.system(size: 12))
                         }
                         .toggleStyle(.switch)
@@ -1581,27 +1600,51 @@ struct MainView: View {
                     .background(Color.primary.opacity(0.03))
                     .cornerRadius(8)
                     
+                    // Language section
+                    VStack(alignment: .leading, spacing: 10) {
+                        Label(L("settings.language"), systemImage: "globe")
+                            .font(.system(size: 13, weight: .semibold))
+                        
+                        Picker("", selection: $langManager.appLanguage) {
+                            Text(L("settings.language.auto")).tag("auto")
+                            Text(L("settings.language.zh")).tag("zh")
+                            Text(L("settings.language.en")).tag("en")
+                        }
+                        .pickerStyle(.segmented)
+                        .onChange(of: langManager.appLanguage) { _, _ in
+                            langManager.reloadBundle()
+                        }
+                        
+                        Text(L("settings.language.restart"))
+                            .font(.system(size: 10))
+                            .foregroundColor(.secondary)
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(12)
+                    .background(Color.primary.opacity(0.03))
+                    .cornerRadius(8)
+                    
                     // About section
                     VStack(alignment: .leading, spacing: 10) {
-                        Label("About", systemImage: "info.circle.fill")
+                        Label(L("settings.about"), systemImage: "info.circle.fill")
                             .font(.system(size: 13, weight: .semibold))
                         
                         HStack {
-                            Text("Version")
+                            Text(L("settings.version"))
                                 .font(.system(size: 12))
                                 .foregroundColor(.secondary)
                             Spacer()
-                            Text("1.6.9")
+                            Text(L("app.version"))
                                 .font(.system(size: 12, design: .monospaced))
                                 .foregroundColor(.primary)
                         }
                         
                         HStack {
-                            Text("GitHub")
+                            Text(L("settings.github"))
                                 .font(.system(size: 12))
                                 .foregroundColor(.secondary)
                             Spacer()
-                            Button("bysiber/ClearDisk") {
+                            Button(L("settings.github.repo")) {
                                 if let url = URL(string: "https://github.com/bysiber/ClearDisk") {
                                     NSWorkspace.shared.open(url)
                                 }
@@ -1613,11 +1656,11 @@ struct MainView: View {
                         Divider()
                         
                         HStack {
-                            Text("Updates")
+                            Text(L("settings.updates"))
                                 .font(.system(size: 12))
                                 .foregroundColor(.secondary)
                             Spacer()
-                            Button("Check for Updates") {
+                            Button(L("settings.checkUpdates")) {
                                 if let url = URL(string: "https://github.com/bysiber/cleardisk/releases/latest") {
                                     NSWorkspace.shared.open(url)
                                 }
@@ -1626,7 +1669,7 @@ struct MainView: View {
                             .controlSize(.small)
                         }
                         
-                        Text("Opens GitHub releases page. No network requests from ClearDisk.")
+                        Text(L("settings.updatesNote"))
                             .font(.system(size: 9))
                             .foregroundColor(.secondary.opacity(0.7))
                     }
@@ -1655,11 +1698,11 @@ struct MainView: View {
                     Image(systemName: "bell.slash.fill")
                         .font(.system(size: 10))
                         .foregroundColor(.orange)
-                    Text("Notifications disabled — you won't get disk space alerts")
+                    Text(L("settings.notifications.disabledWarning"))
                         .font(.system(size: 10))
                         .foregroundColor(.orange)
                     Spacer()
-                    Button("Settings") {
+                    Button(L("button.settings")) {
                         if let url = URL(string: "x-apple.systempreferences:com.apple.preference.notifications") {
                             NSWorkspace.shared.open(url)
                         }
@@ -1695,14 +1738,14 @@ struct MainView: View {
                     HStack(spacing: 3) {
                         Image(systemName: "chevron.left")
                             .font(.system(size: 11, weight: .semibold))
-                        Text("Back")
+                        Text(L("button.back"))
                             .font(.system(size: 12))
                     }
                 }
                 .buttonStyle(.plain)
                 .foregroundColor(.accentColor)
                 Spacer()
-                Text("Clean Caches")
+                Text(L("dashboard.cleanCaches"))
                     .font(.system(size: 13, weight: .semibold))
                 Spacer()
                 // Invisible balancer
@@ -1722,7 +1765,7 @@ struct MainView: View {
                     cacheCleanMode = .safe
                     selectedCacheIDs = []
                 }) {
-                    Text("Safe")
+                    Text(L("cleanCaches.safe"))
                         .font(.system(size: 10, weight: cacheCleanMode == .safe ? .semibold : .regular))
                         .foregroundColor(cacheCleanMode == .safe ? .green : .secondary)
                         .padding(.horizontal, 8)
@@ -1737,7 +1780,7 @@ struct MainView: View {
                     cacheCleanMode = .moderate
                     selectedCacheIDs = []
                 }) {
-                    Text("Moderate")
+                    Text(L("cleanCaches.moderate"))
                         .font(.system(size: 10, weight: cacheCleanMode == .moderate ? .semibold : .regular))
                         .foregroundColor(cacheCleanMode == .moderate ? .orange : .secondary)
                         .padding(.horizontal, 8)
@@ -1752,7 +1795,7 @@ struct MainView: View {
                     cacheCleanMode = .everything
                     selectedCacheIDs = []
                 }) {
-                    Text("Everything")
+                    Text(L("cleanCaches.everything"))
                         .font(.system(size: 10, weight: cacheCleanMode == .everything ? .semibold : .regular))
                         .foregroundColor(cacheCleanMode == .everything ? .red : .secondary)
                         .padding(.horizontal, 8)
@@ -1792,7 +1835,7 @@ struct MainView: View {
                             Image(systemName: "externaldrive.badge.checkmark")
                                 .font(.system(size: 24))
                                 .foregroundColor(.secondary)
-                            Text("No caches found")
+                            Text(L("cleanCaches.noCaches"))
                                 .font(.system(size: 12))
                                 .foregroundColor(.secondary)
                         }
@@ -1849,7 +1892,7 @@ struct MainView: View {
                                         Image(systemName: "exclamationmark.triangle.fill")
                                             .font(.system(size: 10))
                                             .foregroundColor(.red)
-                                        Text("\(riskySelected.count) risky cache(s) selected:")
+                                        Text(L("cleanCaches.riskySelected", riskySelected.count))
                                             .font(.system(size: 10, weight: .semibold))
                                             .foregroundColor(.red)
                                         Spacer()
@@ -1859,7 +1902,7 @@ struct MainView: View {
                                             .font(.system(size: 9))
                                             .foregroundColor(.red.opacity(0.8))
                                     }
-                                    Text("May contain data that cannot be rebuilt")
+                                    Text(L("cleanCaches.riskyWarning"))
                                         .font(.system(size: 9))
                                         .foregroundColor(.secondary)
                                 }
@@ -1879,7 +1922,7 @@ struct MainView: View {
             
             // Selection summary + action
             HStack {
-                Text("\(selectedCount) selected · \(formatBytes(selectedSize))")
+                Text(L("cleanCaches.selectedCount", selectedCount, formatBytes(selectedSize)))
                     .font(.system(size: 10))
                     .foregroundColor(.secondary)
                 Spacer()
@@ -1899,7 +1942,7 @@ struct MainView: View {
                         Image(systemName: "trash.fill")
                             .font(.system(size: 12))
                     }
-                    Text(isCleaning ? "Cleaning..." : "Clean Selected (\(formatBytes(selectedSize)))")
+                    Text(isCleaning ? L("button.cleaning") : L("button.cleanSelected", formatBytes(selectedSize)))
                         .font(.system(size: 12, weight: .semibold))
                 }
                 .frame(maxWidth: .infinity)
@@ -1938,14 +1981,14 @@ struct MainView: View {
                     HStack(spacing: 3) {
                         Image(systemName: "chevron.left")
                             .font(.system(size: 11, weight: .semibold))
-                        Text("Back")
+                        Text(L("button.back"))
                             .font(.system(size: 12))
                     }
                 }
                 .buttonStyle(.plain)
                 .foregroundColor(.accentColor)
                 Spacer()
-                Text("Clean Projects")
+                Text(L("dashboard.cleanProjects"))
                     .font(.system(size: 13, weight: .semibold))
                 Spacer()
                 Text("Back__")
@@ -1965,7 +2008,7 @@ struct MainView: View {
                         projectFilterMode = mode
                         selectedArtifactIDs = []
                     }) {
-                        Text(mode.rawValue)
+                        Text(mode.localizedName)
                             .font(.system(size: 10, weight: projectFilterMode == mode ? .semibold : .regular))
                             .foregroundColor(projectFilterMode == mode ? .accentColor : .secondary)
                             .padding(.horizontal, 8)
@@ -2006,7 +2049,7 @@ struct MainView: View {
                             Image(systemName: "folder.badge.questionmark")
                                 .font(.system(size: 24))
                                 .foregroundColor(.secondary)
-                            Text("No artifacts match the filter")
+                            Text(L("artifacts.noMatch"))
                                 .font(.system(size: 12))
                                 .foregroundColor(.secondary)
                         }
@@ -2075,7 +2118,7 @@ struct MainView: View {
             
             // Selection summary + action
             HStack {
-                Text("\(selectedCount) selected · \(formatBytes(selectedSize))")
+                Text(L("cleanCaches.selectedCount", selectedCount, formatBytes(selectedSize)))
                     .font(.system(size: 10))
                     .foregroundColor(.secondary)
                 Spacer()
@@ -2141,17 +2184,17 @@ struct MainView: View {
                     Image(systemName: "leaf.fill")
                         .font(.system(size: 9))
                         .foregroundColor(.green)
-                    Text("Total saved: \(formatBytes(diskMonitor.totalSavedAllTime))")
+                    Text(L("recovery.totalSaved", formatBytes(diskMonitor.totalSavedAllTime)))
                         .font(.system(size: 10, weight: .medium))
                         .foregroundColor(.green)
                 }
             } else {
-                Text("ClearDisk v1.6.6")
+                Text("ClearDisk v\(L("app.version"))")
                     .font(.system(size: 10))
                     .foregroundColor(.secondary)
             }
             Spacer()
-            Button("Quit") {
+            Button(L("button.quit")) {
                 NSApplication.shared.terminate(nil)
             }
             .font(.system(size: 11))

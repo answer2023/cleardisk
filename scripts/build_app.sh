@@ -25,6 +25,14 @@ if [ -f "Resources/AppIcon.icns" ]; then
     echo "App icon copied."
 fi
 
+# Copy SPM resource bundles (for localization)
+for bundle in .build/release/*.bundle; do
+    if [ -d "$bundle" ]; then
+        cp -R "$bundle" "$APP_BUNDLE/Contents/Resources/"
+        echo "Resource bundle copied: $(basename "$bundle")"
+    fi
+done
+
 # Create Info.plist
 cat > "$APP_BUNDLE/Contents/Info.plist" << 'EOF'
 <?xml version="1.0" encoding="UTF-8"?>
@@ -61,7 +69,7 @@ cat > "$APP_BUNDLE/Contents/Info.plist" << 'EOF'
 </plist>
 EOF
 
-# Ad-hoc code sign the entire bundle (better Gatekeeper handling than linker-signed)
+# Ad-hoc code sign the entire bundle
 codesign --force --deep -s - "$APP_BUNDLE"
 echo "Code signed (ad-hoc)."
 

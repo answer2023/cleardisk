@@ -252,14 +252,14 @@ class DiskMonitor: ObservableObject {
         let pct = usedPercentage
         if pct >= 90 && lastNotifiedThreshold < 90 {
             sendNotification(
-                title: "⚠️ Disk Almost Full!",
-                body: "Disk \(pct)% full. \(formatBytes(safeCleanable)) can be safely cleaned with ClearDisk."
+                title: L("notification.almostFull.title"),
+                body: L("notification.almostFull.body", pct, formatBytes(safeCleanable))
             )
             lastNotifiedThreshold = 90
         } else if pct >= 80 && lastNotifiedThreshold < 80 {
             sendNotification(
-                title: "Disk Space Low",
-                body: "Disk \(pct)% full. \(formatBytes(safeCleanable)) of developer caches can be safely cleaned."
+                title: L("notification.low.title"),
+                body: L("notification.low.body", pct, formatBytes(safeCleanable))
             )
             lastNotifiedThreshold = 80
         }
@@ -345,62 +345,9 @@ class DiskMonitor: ObservableObject {
     // MARK: - Developer Caches
     
     /// Human-readable descriptions for each cache type (inspired by npkill's descriptions)
-    static let cacheDescriptions: [String: String] = [
-        "Xcode DerivedData": "Build products, indexes, and logs. Rebuilds automatically when you open a project.",
-        "Xcode Archives": "Archived builds for App Store or distribution. Re-archive from Xcode to recreate.",
-        "Xcode Simulators": "iOS/watchOS/tvOS simulator devices and data. Re-download from Xcode → Settings.",
-        "Xcode Caches": "Internal Xcode product caches. Rebuilds automatically on next build.",
-        "Xcode Device Support": "Debug symbols for connected iPhones/iPads. Re-downloads when device connects.",
-        "Xcode Logs": "Simulator crash reports and diagnostic logs. Safe to remove anytime.",
-        "Xcode Previews": "SwiftUI preview simulator data. Rebuilds automatically on next preview.",
-        "Simulator Caches": "CoreSimulator dyld and framework caches. Rebuilds automatically.",
-        "Swift PM Cache": "Downloaded Swift packages. Re-downloads on next build (swift build).",
-        "CocoaPods Cache": "Downloaded pod specs and sources. Re-downloads on pod install.",
-        "Carthage": "Carthage dependency build cache. Re-downloads on carthage update.",
-        "Homebrew Cache": "Downloaded formula bottles and taps. Re-downloads on brew install.",
-        "npm Cache": "Cached package tarballs from npmjs.org. Re-downloads on npm install.",
-        "Yarn Cache": "Cached Yarn packages. Re-downloads on yarn install.",
-        "pnpm Store": "Content-addressable package store. Re-downloads on pnpm install.",
-        "Bun Cache": "Cached Bun packages. Re-downloads on bun install.",
-        "Deno Cache": "Cached Deno modules and compiled scripts. Re-downloads on deno run.",
-        "pip Cache": "Downloaded Python wheels and sdists. Re-downloads on pip install.",
-        "UV Cache": "Cached Python packages from uv (fast pip alternative). Re-downloads on uv pip install.",
-        "Conda Packages": "Cached Conda environments and packages. Re-downloads on conda install.",
-        "Gradle Cache": "Downloaded JARs, build outputs, and wrapper dists. Re-downloads on gradle build.",
-        "Maven Cache": "Local Maven repository (.m2). Re-downloads on mvn build.",
-        "Android Emulators": "Android Virtual Devices and disk images. Must re-create in AVD Manager.",
-        "Docker (Data)": "Docker images, containers, and volumes. May lose running containers and uncommitted data!",
-        "Terraform Plugins": "Terraform/OpenTofu CLI plugins and provider cache. Re-downloads on terraform init.",
-        "Composer Cache": "Cached PHP packages. Re-downloads on composer install.",
-        "Go Modules": "Go module download cache. Re-downloads on go mod download.",
-        "Rust Cargo": "Cached crate sources and registries. Re-downloads on cargo build.",
-        "Playwright Browsers": "Downloaded browser binaries for Playwright testing. Re-downloads on npx playwright install.",
-        "Puppeteer Browsers": "Downloaded Chromium binaries for Puppeteer. Re-downloads on npx puppeteer install.",
-        "Prisma Engines": "Prisma ORM query engine binaries. Re-downloads on npx prisma generate.",
-        "Flutter/Pub Cache": "Cached Dart/Flutter packages. Re-downloads on flutter pub get.",
-        "JetBrains Cache": "IDE caches (IntelliJ, WebStorm, etc). Rebuilds on IDE restart.",
-        "Ruby Gems": "Installed gems and docs. Reinstall with bundle install.",
-        "rbenv Versions": "Ruby versions managed by rbenv. Reinstall with rbenv install X.Y.Z.",
-        "mise Rubies": "Ruby versions managed by mise. Reinstall with mise install ruby@X.Y.Z.",
-        "RVM": "RVM rubies and gemsets. Reinstall with rvm install X.Y.Z.",
-        "Bundler Cache": "Downloaded gem files. Rebuilds automatically with bundle install.",
-        // AI Tools
-        "Claude Desktop": "Claude Desktop conversation cache and temp files. Can grow very large. Re-downloads on next launch.",
-        "Claude Code": "Claude Code CLI session history and configs. Re-creates on next session.",
-        "HuggingFace Cache": "Downloaded AI/ML models, tokenizers, and datasets. Re-downloads on next use. Large models may take time.",
-        "Ollama Models": "Downloaded LLM model files. Re-downloads with ollama pull.",
-        "ChatGPT Desktop": "ChatGPT Desktop app data. Conversations sync to cloud.",
-        "Cursor Cache": "Cursor editor cache, workspace storage, and extensions data. Re-builds on next launch.",
-        "Windsurf Cache": "Windsurf editor cache and workspace data. Re-builds on next launch.",
-        // IDEs (VS Code)
-        "VS Code Cache": "VS Code application cache. Safe to delete, rebuilds automatically.",
-        "VS Code Data": "VS Code compiled JavaScript cache. Safe to delete, recompiles on launch.",
-        "VS Code Extensions Cache": "Downloaded extension VSIX packages. Safe to delete, re-downloads when needed.",
-        "VS Code Chromium Cache": "Chromium disk cache used by VS Code. Safe to delete, rebuilds on launch.",
-        "VS Code Logs": "Old session logs and telemetry data. Safe to delete anytime.",
-    ]
+    // Cache descriptions are now loaded from Localizable.strings via cacheDescriptionKeys in Localization.swift
     
-    /// Resolve DerivedData subfolders to project names using info.plist → WorkspacePath
+    /// Resolve DerivedData    /// Resolve DerivedData subfolders to project names using info.plist → WorkspacePath
     func derivedDataProjectSummary() -> String? {
         let home = FileManager.default.homeDirectoryForCurrentUser.path
         let ddPath = "\(home)/Library/Developer/Xcode/DerivedData"
@@ -538,7 +485,7 @@ class DiskMonitor: ObservableObject {
                 let lastAccessed = lastAccessDate(path: entry.path)
                 let daysSinceAccess = daysSince(lastAccessed)
                 let suggestion = generateSuggestion(name: entry.name, size: size, daysSinceAccess: daysSinceAccess)
-                let desc = DiskMonitor.cacheDescriptions[entry.name] ?? ""
+                let desc = { if let key = cacheDescriptionKeys[entry.name] { return L(key) } else { return "" } }()
                 
                 // Resolve DerivedData subfolders to project names
                 var detail: String? = nil
@@ -589,11 +536,11 @@ class DiskMonitor: ObservableObject {
         let sizeGB = Double(size) / 1_073_741_824
         
         if days > 90 && sizeGB >= 1.0 {
-            return "⚠️ Not used for \(days) days, \(formatBytes(size)) — safe to clean"
+            return L("suggestion.longUnused", days, formatBytes(size))
         } else if days > 60 {
-            return "💡 Unused for \(days) days — consider cleaning"
+            return L("suggestion.unused", days)
         } else if days > 30 && sizeGB >= 5.0 {
-            return "💡 \(days) days old, large at \(formatBytes(size))"
+            return L("suggestion.largeDaysOld", days, formatBytes(size))
         }
         return nil
     }
@@ -953,9 +900,9 @@ struct DevCache: Identifiable {
     
     var riskDescription: String {
         switch riskLevel {
-        case "safe": return "Safe — can be rebuilt with a command"
-        case "caution": return "Caution — may need large re-download"
-        case "risky": return "Risky — may contain irreplaceable data"
+        case "safe": return L("risk.safe")
+        case "caution": return L("risk.caution")
+        case "risky": return L("risk.risky")
         default: return ""
         }
     }

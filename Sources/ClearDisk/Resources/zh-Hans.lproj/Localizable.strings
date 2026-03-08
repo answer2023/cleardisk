@@ -1,0 +1,232 @@
+/* ClearDisk - 简体中文本地化 */
+
+// MARK: - 应用通用
+"app.name" = "ClearDisk";
+"app.tagline" = "专为开发者打造的 macOS 磁盘分析工具";
+"app.version" = "1.6.9";
+
+// MARK: - 引导页
+"onboarding.welcome" = "欢迎使用 ClearDisk";
+"onboarding.scanning" = "正在扫描磁盘...";
+"onboarding.getStarted" = "开始使用";
+"onboarding.notifications" = "通知权限：%@";
+
+// MARK: - 标签页
+"tab.developer" = "开发缓存";
+"tab.projects" = "项目";
+"tab.overview" = "概览";
+"tab.largeFiles" = "大文件";
+
+// MARK: - 排序方式
+"sort.size" = "大小";
+"sort.date" = "日期";
+"sort.name" = "名称";
+
+// MARK: - 筛选方式
+"filter.all" = "全部";
+"filter.stale" = "过期 (>30天)";
+
+// MARK: - 仪表盘
+"dashboard.reclaimable" = "可回收空间";
+"dashboard.safe" = "%@ 安全";
+"dashboard.projects" = "%@ 项目";
+"dashboard.risky" = "%@ 高风险";
+"dashboard.trash" = "%@ 废纸篓";
+"dashboard.cleanCaches" = "清理缓存";
+"dashboard.cleanProjects" = "清理项目";
+
+// MARK: - 磁盘使用
+"disk.used" = "%@ 已使用";
+"disk.free" = "%@ 可用";
+"disk.forecast.urgent" = "⚠️ 预计 ~%d 天后磁盘将满！";
+"disk.forecast.warning" = "按当前速率，约 %d 天后磁盘将满";
+"disk.forecast.normal" = "约 %d 天后磁盘满（%@/天）";
+"disk.forecast.collecting" = "正在收集数据... (%d 个快照)";
+
+// MARK: - 废纸篓
+"trash.title" = "废纸篓";
+"trash.empty" = "清空";
+
+// MARK: - 存储趋势
+"trend.title" = "存储趋势";
+"trend.history" = "%d天历史";
+"trend.daysUntilFull" = "约%d天后满";
+
+// MARK: - 恢复
+"recovery.recovered" = "已回收 %@！";
+"recovery.totalSaved" = "累计清理：%@";
+
+// MARK: - 开发缓存
+"devCache.title" = "开发缓存";
+"devCache.locationsFound" = "发现 %d 个缓存位置";
+"devCache.noCaches" = "未发现开发缓存";
+"devCache.diskClean" = "磁盘很干净！";
+"devCache.daysAgo" = "%d天前";
+
+// MARK: - 项目构建产物
+"artifacts.title" = "项目构建产物";
+"artifacts.found" = "发现 %d 个 · %d 个过期 (>30天)";
+"artifacts.noStale" = "未发现过期的项目构建产物";
+"artifacts.scanDirs" = "扫描范围：~/Documents、~/Developer、~/Projects、~/Code、~/Desktop";
+"artifacts.noMatch" = "没有匹配的构建产物";
+"artifacts.staleWarning" = "⚠️ 已过期 — %d 天未修改";
+
+// MARK: - 大文件
+"largeFiles.noFiles" = "未发现大于 100 MB 的文件";
+"largeFiles.scanDirs" = "扫描范围：下载、文稿、桌面、影片";
+
+// MARK: - 清理缓存界面
+"cleanCaches.title" = "清理缓存";
+"cleanCaches.safe" = "安全";
+"cleanCaches.moderate" = "中等";
+"cleanCaches.everything" = "全部";
+"cleanCaches.noCaches" = "未发现缓存";
+"cleanCaches.riskySelected" = "已选择 %d 个高风险缓存：";
+"cleanCaches.riskyWarning" = "可能包含无法重建的数据";
+"cleanCaches.selectedCount" = "已选 %d 个 · %@";
+
+// MARK: - 清理项目界面
+"cleanProjects.title" = "清理项目";
+"cleanProjects.selectedCount" = "已选 %d 个 · %@";
+
+// MARK: - 按钮
+"button.back" = "返回";
+"button.cancel" = "取消";
+"button.moveToTrash" = "移到废纸篓";
+"button.deleteAll" = "全部删除（含高风险）";
+"button.cleanSelected" = "清理所选 (%@)";
+"button.deselectAll" = "取消全选";
+"button.selectAll" = "全选";
+"button.quit" = "退出";
+"button.refresh" = "刷新";
+"button.settings" = "设置";
+"button.cleaning" = "正在清理...";
+"button.checking" = "正在检查...";
+
+// MARK: - 设置
+"settings.title" = "设置";
+"settings.notifications" = "通知";
+"settings.notifications.desc" = "ClearDisk 会在磁盘使用率达到 80% 或 90% 时发出提醒。";
+"settings.notifications.enabled" = "通知已启用";
+"settings.notifications.disabled" = "通知已关闭";
+"settings.notifications.notRequested" = "尚未请求通知权限";
+"settings.notifications.enableInSettings" = "请打开「系统设置 > 通知 > ClearDisk」并启用「允许通知」。";
+"settings.notifications.openSettings" = "打开设置";
+"settings.notifications.enableButton" = "在设置中启用";
+"settings.notifications.enableNotifications" = "启用通知";
+"settings.notifications.disabledWarning" = "通知已关闭 — 磁盘空间不足时将无法收到提醒";
+"settings.general" = "通用";
+"settings.launchAtLogin" = "登录时启动";
+"settings.about" = "关于";
+"settings.version" = "版本";
+"settings.github" = "GitHub";
+"settings.github.repo" = "bysiber/ClearDisk";
+"settings.updates" = "更新";
+"settings.checkUpdates" = "检查更新";
+"settings.updatesNote" = "将打开 GitHub 发布页面。ClearDisk 不会发起任何网络请求。";
+"settings.forecasts" = "预测磁盘何时将满";
+"settings.alerts" = "磁盘空间不足时发出提醒";
+
+// MARK: - 权限标签
+"permission.enabled" = "已启用";
+"permission.denied" = "已拒绝";
+"permission.notRequested" = "未请求";
+
+// MARK: - 确认对话框
+"confirm.cleanCache" = "确定删除 %@ 的所有内容吗？\n将移动 %@ 到废纸篓。\n\n%@ %@%@";
+"confirm.cleanSafe" = "确定清理 %d 个安全/中等缓存吗？\n将移动 %@ 到废纸篓。\n\n高风险缓存（如 Docker）不包含在内。\n文件将移到废纸篓 — 你可以随时恢复。%@";
+"confirm.cleanAll" = "确定将所有开发缓存移到废纸篓吗？\n将释放 %@。\n\n将清理 %d 个缓存位置。\n文件将移到废纸篓 — 你可以随时恢复。%@%@";
+"confirm.cleanArtifact" = "确定从 %2$@ 中删除 %1$@ 吗？\n\n将移动 %3$@ 到废纸篓。\n\n类型：%4$@\n路径：%5$@\n\n重新运行构建/安装命令即可恢复。";
+"confirm.cleanSelected" = "确定清理 %d 个所选缓存吗？\n将移动 %@ 到废纸篓。\n\n文件将移到废纸篓 — 你可以随时恢复。%@%@";
+"confirm.deleteFile" = "确定将「%@」移到废纸篓吗？\n\n大小：%@\n路径：%@\n\n你可以从废纸篓中恢复。";
+
+// MARK: - 弹窗标题
+"alert.cleanCache" = "清理缓存";
+"alert.cleanSafe" = "清理安全缓存";
+"alert.cleanAll" = "清理所有开发缓存";
+"alert.cleanArtifact" = "清理项目构建产物";
+"alert.cleanSelected" = "清理所选缓存";
+"alert.deleteFile" = "删除文件";
+
+// MARK: - 提示信息
+"help.refresh" = "刷新";
+"help.cleanGroup" = "清理所有 %@ 缓存";
+"help.showInFinder" = "在访达中显示";
+"help.cleanCache" = "清理 %@";
+"help.cleanArtifact" = "清理 %@";
+"help.moveToTrash" = "移到废纸篓";
+
+// MARK: - 风险等级
+"risk.safe" = "安全 — 可通过命令重建";
+"risk.caution" = "注意 — 可能需要重新下载大量数据";
+"risk.risky" = "高风险 — 可能包含不可恢复的数据";
+
+// MARK: - 通知
+"notification.almostFull.title" = "⚠️ 磁盘即将满！";
+"notification.almostFull.body" = "磁盘已使用 %d%%。可通过 ClearDisk 安全清理 %@。";
+"notification.low.title" = "磁盘空间不足";
+"notification.low.body" = "磁盘已使用 %d%%。有 %@ 的开发缓存可安全清理。";
+
+// MARK: - 智能建议
+"suggestion.longUnused" = "⚠️ %d 天未使用，%@ — 可安全清理";
+"suggestion.unused" = "💡 已 %d 天未使用 — 建议清理";
+"suggestion.largeDaysOld" = "💡 已存在 %d 天，占用 %@";
+
+// MARK: - 缓存描述
+"cache.desc.xcodeDerivedData" = "构建产物、索引和日志。打开项目时自动重建。";
+"cache.desc.xcodeArchives" = "用于 App Store 或分发的归档构建。可从 Xcode 重新归档。";
+"cache.desc.xcodeSimulators" = "iOS/watchOS/tvOS 模拟器设备和数据。可从 Xcode → 设置中重新下载。";
+"cache.desc.xcodeCaches" = "Xcode 内部产品缓存。下次构建时自动重建。";
+"cache.desc.xcodeDeviceSupport" = "已连接 iPhone/iPad 的调试符号。设备连接时自动重新下载。";
+"cache.desc.xcodeLogs" = "模拟器崩溃报告和诊断日志。可随时安全删除。";
+"cache.desc.xcodePreviews" = "SwiftUI 预览模拟器数据。下次预览时自动重建。";
+"cache.desc.simulatorCaches" = "CoreSimulator dyld 和框架缓存。自动重建。";
+"cache.desc.swiftPM" = "已下载的 Swift 包。下次构建时重新下载 (swift build)。";
+"cache.desc.cocoapods" = "已下载的 Pod 规格和源码。运行 pod install 时重新下载。";
+"cache.desc.carthage" = "Carthage 依赖构建缓存。运行 carthage update 时重新下载。";
+"cache.desc.homebrew" = "已下载的 formula 瓶和 tap。运行 brew install 时重新下载。";
+"cache.desc.npm" = "来自 npmjs.org 的缓存包。运行 npm install 时重新下载。";
+"cache.desc.yarn" = "缓存的 Yarn 包。运行 yarn install 时重新下载。";
+"cache.desc.pnpm" = "内容寻址包存储。运行 pnpm install 时重新下载。";
+"cache.desc.bun" = "缓存的 Bun 包。运行 bun install 时重新下载。";
+"cache.desc.deno" = "缓存的 Deno 模块和编译脚本。运行 deno run 时重新下载。";
+"cache.desc.pip" = "已下载的 Python wheel 和 sdist。运行 pip install 时重新下载。";
+"cache.desc.uv" = "uv（快速 pip 替代）缓存的 Python 包。运行 uv pip install 时重新下载。";
+"cache.desc.conda" = "缓存的 Conda 环境和包。运行 conda install 时重新下载。";
+"cache.desc.gradle" = "已下载的 JAR、构建输出和包装器。运行 gradle build 时重新下载。";
+"cache.desc.maven" = "本地 Maven 仓库 (.m2)。运行 mvn build 时重新下载。";
+"cache.desc.androidEmulators" = "Android 虚拟设备和磁盘镜像。需在 AVD 管理器中重新创建。";
+"cache.desc.docker" = "Docker 镜像、容器和卷。可能丢失运行中的容器和未提交的数据！";
+"cache.desc.terraform" = "Terraform/OpenTofu CLI 插件和提供者缓存。运行 terraform init 时重新下载。";
+"cache.desc.composer" = "缓存的 PHP 包。运行 composer install 时重新下载。";
+"cache.desc.goModules" = "Go 模块下载缓存。运行 go mod download 时重新下载。";
+"cache.desc.rustCargo" = "缓存的 crate 源码和注册表。运行 cargo build 时重新下载。";
+"cache.desc.playwright" = "Playwright 测试用浏览器。运行 npx playwright install 时重新下载。";
+"cache.desc.puppeteer" = "Puppeteer 用 Chromium 浏览器。运行 npx puppeteer install 时重新下载。";
+"cache.desc.prisma" = "Prisma ORM 查询引擎。运行 npx prisma generate 时重新下载。";
+"cache.desc.flutter" = "缓存的 Dart/Flutter 包。运行 flutter pub get 时重新下载。";
+"cache.desc.jetbrains" = "IDE 缓存（IntelliJ、WebStorm 等）。重启 IDE 时重建。";
+"cache.desc.rubyGems" = "已安装的 gem 和文档。运行 bundle install 重新安装。";
+"cache.desc.rbenv" = "rbenv 管理的 Ruby 版本。运行 rbenv install X.Y.Z 重新安装。";
+"cache.desc.mise" = "mise 管理的 Ruby 版本。运行 mise install ruby@X.Y.Z 重新安装。";
+"cache.desc.rvm" = "RVM 的 Ruby 和 gemset。运行 rvm install X.Y.Z 重新安装。";
+"cache.desc.bundler" = "已下载的 gem 文件。运行 bundle install 时自动重建。";
+"cache.desc.claudeDesktop" = "Claude Desktop 对话缓存和临时文件。可能很大。下次启动时重新下载。";
+"cache.desc.claudeCode" = "Claude Code CLI 会话历史和配置。下次会话时重新创建。";
+"cache.desc.huggingface" = "已下载的 AI/ML 模型、分词器和数据集。下次使用时重新下载。大模型可能需要较长时间。";
+"cache.desc.ollama" = "已下载的 LLM 模型文件。运行 ollama pull 重新下载。";
+"cache.desc.chatgpt" = "ChatGPT Desktop 应用数据。对话已同步到云端。";
+"cache.desc.cursor" = "Cursor 编辑器缓存、工作区存储和扩展数据。下次启动时重建。";
+"cache.desc.windsurf" = "Windsurf 编辑器缓存和工作区数据。下次启动时重建。";
+"cache.desc.vscodeCache" = "VS Code 应用缓存。可安全删除，自动重建。";
+"cache.desc.vscodeData" = "VS Code 编译的 JavaScript 缓存。可安全删除，启动时重新编译。";
+"cache.desc.vscodeExtensions" = "已下载的扩展 VSIX 包。可安全删除，需要时重新下载。";
+"cache.desc.vscodeChromium" = "VS Code 使用的 Chromium 磁盘缓存。可安全删除，启动时重建。";
+"cache.desc.vscodeLogs" = "旧的会话日志和遥测数据。可随时安全删除。";
+
+// MARK: - 语言设置
+"settings.language" = "语言";
+"settings.language.auto" = "自动（跟随系统）";
+"settings.language.zh" = "简体中文";
+"settings.language.en" = "English";
+"settings.language.restart" = "切换语言后需重启应用生效。";

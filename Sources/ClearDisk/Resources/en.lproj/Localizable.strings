@@ -1,0 +1,232 @@
+/* ClearDisk - English Localization */
+
+// MARK: - App General
+"app.name" = "ClearDisk";
+"app.tagline" = "Your macOS disk analyzer for developers";
+"app.version" = "1.6.9";
+
+// MARK: - Onboarding
+"onboarding.welcome" = "Welcome to ClearDisk";
+"onboarding.scanning" = "Scanning your disk...";
+"onboarding.getStarted" = "Get Started";
+"onboarding.notifications" = "Notifications: %@";
+
+// MARK: - Tabs
+"tab.developer" = "Developer";
+"tab.projects" = "Projects";
+"tab.overview" = "Overview";
+"tab.largeFiles" = "Large Files";
+
+// MARK: - Sort Modes
+"sort.size" = "Size";
+"sort.date" = "Date";
+"sort.name" = "Name";
+
+// MARK: - Filter Modes
+"filter.all" = "All";
+"filter.stale" = "Stale (>30d)";
+
+// MARK: - Dashboard / Hero
+"dashboard.reclaimable" = "reclaimable space found";
+"dashboard.safe" = "%@ safe";
+"dashboard.projects" = "%@ projects";
+"dashboard.risky" = "%@ risky";
+"dashboard.trash" = "%@ trash";
+"dashboard.cleanCaches" = "Clean Caches";
+"dashboard.cleanProjects" = "Clean Projects";
+
+// MARK: - Disk Usage
+"disk.used" = "%@ used";
+"disk.free" = "%@ free";
+"disk.forecast.urgent" = "⚠️ Disk full in ~%d day(s)!";
+"disk.forecast.warning" = "Disk full in ~%d days at current rate";
+"disk.forecast.normal" = "~%d days until full (%@/day)";
+"disk.forecast.collecting" = "Forecast: collecting data... (%d snapshot(s))";
+
+// MARK: - Trash
+"trash.title" = "Trash";
+"trash.empty" = "Empty";
+
+// MARK: - Storage Trend
+"trend.title" = "Storage Trend";
+"trend.history" = "%dd history";
+"trend.daysUntilFull" = "~%dd until full";
+
+// MARK: - Recovery
+"recovery.recovered" = "Recovered %@!";
+"recovery.totalSaved" = "Total saved: %@";
+
+// MARK: - Developer Caches
+"devCache.title" = "Developer Caches";
+"devCache.locationsFound" = "%d locations found";
+"devCache.noCaches" = "No developer caches found";
+"devCache.diskClean" = "Your disk is clean!";
+"devCache.daysAgo" = "%dd ago";
+
+// MARK: - Project Artifacts
+"artifacts.title" = "Project Build Artifacts";
+"artifacts.found" = "%d found · %d stale (>30 days)";
+"artifacts.noStale" = "No stale project artifacts found";
+"artifacts.scanDirs" = "Scans ~/Documents, ~/Developer, ~/Projects, ~/Code, ~/Desktop";
+"artifacts.noMatch" = "No artifacts match the filter";
+"artifacts.staleWarning" = "⚠️ Stale — not modified for %d days";
+
+// MARK: - Large Files
+"largeFiles.noFiles" = "No files larger than 100 MB found";
+"largeFiles.scanDirs" = "Scanning Downloads, Documents, Desktop, Movies";
+
+// MARK: - Clean Caches Screen
+"cleanCaches.title" = "Clean Caches";
+"cleanCaches.safe" = "Safe";
+"cleanCaches.moderate" = "Moderate";
+"cleanCaches.everything" = "Everything";
+"cleanCaches.noCaches" = "No caches found";
+"cleanCaches.riskySelected" = "%d risky cache(s) selected:";
+"cleanCaches.riskyWarning" = "May contain data that cannot be rebuilt";
+"cleanCaches.selectedCount" = "%d selected · %@";
+
+// MARK: - Clean Projects Screen
+"cleanProjects.title" = "Clean Projects";
+"cleanProjects.selectedCount" = "%d selected · %@";
+
+// MARK: - Buttons
+"button.back" = "Back";
+"button.cancel" = "Cancel";
+"button.moveToTrash" = "Move to Trash";
+"button.deleteAll" = "Delete All (Including Risky)";
+"button.cleanSelected" = "Clean Selected (%@)";
+"button.deselectAll" = "Deselect All";
+"button.selectAll" = "Select All";
+"button.quit" = "Quit";
+"button.refresh" = "Refresh";
+"button.settings" = "Settings";
+"button.cleaning" = "Cleaning...";
+"button.checking" = "Checking...";
+
+// MARK: - Settings
+"settings.title" = "Settings";
+"settings.notifications" = "Notifications";
+"settings.notifications.desc" = "ClearDisk sends alerts when your disk usage reaches 80% or 90%.";
+"settings.notifications.enabled" = "Notifications enabled";
+"settings.notifications.disabled" = "Notifications disabled";
+"settings.notifications.notRequested" = "Permission not requested";
+"settings.notifications.enableInSettings" = "To enable notifications, open System Settings > Notifications > ClearDisk and turn on \"Allow Notifications\".";
+"settings.notifications.openSettings" = "Open Settings";
+"settings.notifications.enableButton" = "Enable in Settings";
+"settings.notifications.enableNotifications" = "Enable Notifications";
+"settings.notifications.disabledWarning" = "Notifications disabled — you won't get disk space alerts";
+"settings.general" = "General";
+"settings.launchAtLogin" = "Launch at Login";
+"settings.about" = "About";
+"settings.version" = "Version";
+"settings.github" = "GitHub";
+"settings.github.repo" = "bysiber/ClearDisk";
+"settings.updates" = "Updates";
+"settings.checkUpdates" = "Check for Updates";
+"settings.updatesNote" = "Opens GitHub releases page. No network requests from ClearDisk.";
+"settings.forecasts" = "Forecasts when your disk will be full";
+"settings.alerts" = "Alerts when disk space is running low";
+
+// MARK: - Permission Labels
+"permission.enabled" = "Enabled";
+"permission.denied" = "Denied";
+"permission.notRequested" = "Not Requested";
+
+// MARK: - Confirm Dialogs
+"confirm.cleanCache" = "Delete all contents of %@?\nThis will move %@ to Trash.\n\n%@ %@%@";
+"confirm.cleanSafe" = "Clean %d safe/caution caches?\nThis will move %@ to Trash.\n\nRisky caches (like Docker) are NOT included.\nFiles go to Trash — you can recover them.%@";
+"confirm.cleanAll" = "Move ALL developer caches to Trash?\nThis will free %@.\n\n%d cache locations will be cleaned.\nFiles go to Trash — you can recover them.%@%@";
+"confirm.cleanArtifact" = "Delete %@ from %@?\n\nThis will move %@ to Trash.\n\nType: %@\nPath: %@\n\nRe-run your build/install command to restore.";
+"confirm.cleanSelected" = "Clean %d selected cache(s)?\nThis will move %@ to Trash.\n\nFiles go to Trash — you can recover them.%@%@";
+"confirm.deleteFile" = "Move \"%@\" to Trash?\n\nSize: %@\nPath: %@\n\nYou can recover it from Trash.";
+
+// MARK: - Alert Titles
+"alert.cleanCache" = "Clean Cache";
+"alert.cleanSafe" = "Clean Safe Caches";
+"alert.cleanAll" = "Clean ALL Developer Caches";
+"alert.cleanArtifact" = "Clean Project Artifact";
+"alert.cleanSelected" = "Clean Selected Caches";
+"alert.deleteFile" = "Delete File";
+
+// MARK: - Help Tooltips
+"help.refresh" = "Refresh";
+"help.cleanGroup" = "Clean all %@ caches";
+"help.showInFinder" = "Show in Finder";
+"help.cleanCache" = "Clean %@";
+"help.cleanArtifact" = "Clean %@";
+"help.moveToTrash" = "Move to Trash";
+
+// MARK: - Risk Levels
+"risk.safe" = "Safe — can be rebuilt with a command";
+"risk.caution" = "Caution — may need large re-download";
+"risk.risky" = "Risky — may contain irreplaceable data";
+
+// MARK: - Notifications
+"notification.almostFull.title" = "⚠️ Disk Almost Full!";
+"notification.almostFull.body" = "Disk %d%% full. %@ can be safely cleaned with ClearDisk.";
+"notification.low.title" = "Disk Space Low";
+"notification.low.body" = "Disk %d%% full. %@ of developer caches can be safely cleaned.";
+
+// MARK: - Suggestions
+"suggestion.longUnused" = "⚠️ Not used for %d days, %@ — safe to clean";
+"suggestion.unused" = "💡 Unused for %d days — consider cleaning";
+"suggestion.largeDaysOld" = "💡 %d days old, large at %@";
+
+// MARK: - Cache Descriptions
+"cache.desc.xcodeDerivedData" = "Build products, indexes, and logs. Rebuilds automatically when you open a project.";
+"cache.desc.xcodeArchives" = "Archived builds for App Store or distribution. Re-archive from Xcode to recreate.";
+"cache.desc.xcodeSimulators" = "iOS/watchOS/tvOS simulator devices and data. Re-download from Xcode → Settings.";
+"cache.desc.xcodeCaches" = "Internal Xcode product caches. Rebuilds automatically on next build.";
+"cache.desc.xcodeDeviceSupport" = "Debug symbols for connected iPhones/iPads. Re-downloads when device connects.";
+"cache.desc.xcodeLogs" = "Simulator crash reports and diagnostic logs. Safe to remove anytime.";
+"cache.desc.xcodePreviews" = "SwiftUI preview simulator data. Rebuilds automatically on next preview.";
+"cache.desc.simulatorCaches" = "CoreSimulator dyld and framework caches. Rebuilds automatically.";
+"cache.desc.swiftPM" = "Downloaded Swift packages. Re-downloads on next build (swift build).";
+"cache.desc.cocoapods" = "Downloaded pod specs and sources. Re-downloads on pod install.";
+"cache.desc.carthage" = "Carthage dependency build cache. Re-downloads on carthage update.";
+"cache.desc.homebrew" = "Downloaded formula bottles and taps. Re-downloads on brew install.";
+"cache.desc.npm" = "Cached package tarballs from npmjs.org. Re-downloads on npm install.";
+"cache.desc.yarn" = "Cached Yarn packages. Re-downloads on yarn install.";
+"cache.desc.pnpm" = "Content-addressable package store. Re-downloads on pnpm install.";
+"cache.desc.bun" = "Cached Bun packages. Re-downloads on bun install.";
+"cache.desc.deno" = "Cached Deno modules and compiled scripts. Re-downloads on deno run.";
+"cache.desc.pip" = "Downloaded Python wheels and sdists. Re-downloads on pip install.";
+"cache.desc.uv" = "Cached Python packages from uv (fast pip alternative). Re-downloads on uv pip install.";
+"cache.desc.conda" = "Cached Conda environments and packages. Re-downloads on conda install.";
+"cache.desc.gradle" = "Downloaded JARs, build outputs, and wrapper dists. Re-downloads on gradle build.";
+"cache.desc.maven" = "Local Maven repository (.m2). Re-downloads on mvn build.";
+"cache.desc.androidEmulators" = "Android Virtual Devices and disk images. Must re-create in AVD Manager.";
+"cache.desc.docker" = "Docker images, containers, and volumes. May lose running containers and uncommitted data!";
+"cache.desc.terraform" = "Terraform/OpenTofu CLI plugins and provider cache. Re-downloads on terraform init.";
+"cache.desc.composer" = "Cached PHP packages. Re-downloads on composer install.";
+"cache.desc.goModules" = "Go module download cache. Re-downloads on go mod download.";
+"cache.desc.rustCargo" = "Cached crate sources and registries. Re-downloads on cargo build.";
+"cache.desc.playwright" = "Downloaded browser binaries for Playwright testing. Re-downloads on npx playwright install.";
+"cache.desc.puppeteer" = "Downloaded Chromium binaries for Puppeteer. Re-downloads on npx puppeteer install.";
+"cache.desc.prisma" = "Prisma ORM query engine binaries. Re-downloads on npx prisma generate.";
+"cache.desc.flutter" = "Cached Dart/Flutter packages. Re-downloads on flutter pub get.";
+"cache.desc.jetbrains" = "IDE caches (IntelliJ, WebStorm, etc). Rebuilds on IDE restart.";
+"cache.desc.rubyGems" = "Installed gems and docs. Reinstall with bundle install.";
+"cache.desc.rbenv" = "Ruby versions managed by rbenv. Reinstall with rbenv install X.Y.Z.";
+"cache.desc.mise" = "Ruby versions managed by mise. Reinstall with mise install ruby@X.Y.Z.";
+"cache.desc.rvm" = "RVM rubies and gemsets. Reinstall with rvm install X.Y.Z.";
+"cache.desc.bundler" = "Downloaded gem files. Rebuilds automatically with bundle install.";
+"cache.desc.claudeDesktop" = "Claude Desktop conversation cache and temp files. Can grow very large. Re-downloads on next launch.";
+"cache.desc.claudeCode" = "Claude Code CLI session history and configs. Re-creates on next session.";
+"cache.desc.huggingface" = "Downloaded AI/ML models, tokenizers, and datasets. Re-downloads on next use. Large models may take time.";
+"cache.desc.ollama" = "Downloaded LLM model files. Re-downloads with ollama pull.";
+"cache.desc.chatgpt" = "ChatGPT Desktop app data. Conversations sync to cloud.";
+"cache.desc.cursor" = "Cursor editor cache, workspace storage, and extensions data. Re-builds on next launch.";
+"cache.desc.windsurf" = "Windsurf editor cache and workspace data. Re-builds on next launch.";
+"cache.desc.vscodeCache" = "VS Code application cache. Safe to delete, rebuilds automatically.";
+"cache.desc.vscodeData" = "VS Code compiled JavaScript cache. Safe to delete, recompiles on launch.";
+"cache.desc.vscodeExtensions" = "Downloaded extension VSIX packages. Safe to delete, re-downloads when needed.";
+"cache.desc.vscodeChromium" = "Chromium disk cache used by VS Code. Safe to delete, rebuilds on launch.";
+"cache.desc.vscodeLogs" = "Old session logs and telemetry data. Safe to delete anytime.";
+
+// MARK: - Language Settings
+"settings.language" = "Language";
+"settings.language.auto" = "Auto (System)";
+"settings.language.zh" = "简体中文";
+"settings.language.en" = "English";
+"settings.language.restart" = "Language will update after restarting the app.";
